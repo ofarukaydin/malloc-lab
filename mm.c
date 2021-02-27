@@ -26,9 +26,9 @@ team_t team = {
     /* Team name */
     "ateam",
     /* First member's full name */
-    "Harry Bovik",
+    "Faruk Aydin",
     /* First member's email address */
-    "bovik@cs.cmu.edu",
+    "farukaydin@outlook.com",
     /* Second member's full name (leave blank if none) */
     "",
     /* Second member's email address (leave blank if none) */
@@ -71,6 +71,7 @@ static char *heap_listp;
 
 static void *find_fit(size_t asize)
 {
+
     /* First-fit search */
     void *bp;
     for (bp = heap_listp; GET_SIZE(HDRP(bp)) > 0; bp = NEXT_BLKP(bp))
@@ -79,8 +80,8 @@ static void *find_fit(size_t asize)
         {
             return bp;
         }
-        return NULL; /* No fit */
     }
+    return NULL; /* No fit */
 }
 
 static void place(void *bp, size_t asize)
@@ -93,8 +94,8 @@ static void place(void *bp, size_t asize)
         PUT(HDRP(bp), PACK(asize, 1));
         PUT(FTRP(bp), PACK(asize, 1));
         bp = NEXT_BLKP(bp);
-        PUT(HDRP(bp), PUT(csize - asize, 0));
-        PUT(FTRP(bp), PUT(csize - asize, 0));
+        PUT(HDRP(bp), PACK(csize - asize, 0));
+        PUT(FTRP(bp), PACK(csize - asize, 0));
     }
     else
     {
@@ -105,6 +106,7 @@ static void place(void *bp, size_t asize)
 
 static void *coalesce(void *bp)
 {
+
     size_t prev_alloc = GET_ALLOC(FTRP(PREV_BLKP(bp)));
     size_t next_alloc = GET_ALLOC(HDRP(NEXT_BLKP(bp)));
     size_t size = GET_SIZE(HDRP(bp));
@@ -142,6 +144,7 @@ static void *coalesce(void *bp)
 
 static void *extend_heap(size_t words)
 {
+
     char *bp;
     size_t size;
 
@@ -192,6 +195,7 @@ int mm_init(void)
  */
 void *mm_malloc(size_t size)
 {
+
     int newsize = ALIGN(size + SIZE_T_SIZE);
     size_t extendsize;
     char *bp;
@@ -216,6 +220,7 @@ void *mm_malloc(size_t size)
  */
 void mm_free(void *ptr)
 {
+
     size_t size = GET_SIZE(HDRP(ptr));
 
     PUT(HDRP(ptr), PACK(size, 0));
@@ -228,6 +233,7 @@ void mm_free(void *ptr)
  */
 void *mm_realloc(void *ptr, size_t size)
 {
+
     void *oldptr = ptr;
     void *newptr;
     size_t copySize;
